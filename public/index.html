@@ -14,23 +14,55 @@
 
         <h3>Object tracker</h3>
         <div id="obtrackparent">
-            <img id="radar">
+            <img id="radar" style="max-width:100%;">
             <div id="objectdata" class="data_div">
-                <h4 id="objectname"></h4>
-                <pre id="pre"></pre>
+                <h4 id="objectname" style="margin-top:5px;"></h4>
+                <label>Next AOS: <span id="next_aos"></span></label>
+                <label>Next LOS: <span id="next_los"></span></label>
+                <br/>
+                <label><b>Current position:</b></label>
+                <label>Azimuth: <span id="pos_azimuth"></span></label>
+                <label>Elevation : <span id="pos_elevation"></span></label>
+                <label>Range: <span id="pos_range"></span></label>
             </div>
         </div>
         <h3>Schedule</h3>
             <img id="schedule" class="maxwidth">
         <h3>FFT</h3>
             <img id="fft" class="maxwidth">
-    <script>
+    <script type="application/javascript">
+        function timestampToDateTimeString(timestamp) {
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleString();
+        }
+        function calculateSatelliteElevation(satelliteData) {
+            // Get the satellite's current elevation from the data
+            const elevationRadians = satelliteData.object_tracker.sat_current_pos.el * (Math.PI / 180); // Convert elevation to radians
+            // Convert elevation from radians to degrees
+            const elevationDegrees = elevationRadians * (180 / Math.PI);
+
+            return elevationDegrees.toFixed(2);
+        }
+        function calculateSatelliteAzimuth(satelliteData) {
+            // Get the satellite's current azimuth from the data
+            const azimuthDegrees = satelliteData.object_tracker.sat_current_pos.az;
+
+            return azimuthDegrees.toFixed(2);
+        }
         function getJson(){
             $.get("/proxy/api")
             .done((json)=>{
-                $("#pre").html(JSON.stringify(json.object_tracker));
                 $("#frequency").html(`${json.frequency/1000000} MHz`);
                 $("#objectname").html(`${json.object_tracker.object_name}`);
+                const ot = json.object_tracker;
+                $("#next_aos").html(`${timestampToDateTimeString(ot.next_aos_time)}`);
+                $("#next_los").html(`${timestampToDateTimeString(ot.next_los_time)}`);
+                $("#pos_azimuth").html(`${calculateSatelliteAzimuth(json)}°`);
+                $("#pos_elevation").html(`${calculateSatelliteElevation(json)}°`);
+                $("#pos_range").html(`${ot.sat_current_range.toFixed(2)} km`);
+            })
+            .fail(()=>{
+                console.log("Service Unavailable");
             })
             $("#radar").attr("src", "/proxy/polarplot.jpeg?r=" + Date.now());
             $("#fft").attr("src", "/proxy/fft.jpeg?r=" + Date.now());
