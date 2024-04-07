@@ -31,6 +31,23 @@
         <h3>FFT</h3>
             <img id="fft" class="maxwidth">
     <script type="application/javascript">
+        function formatTime(seconds) {
+            if (seconds < 60) {
+                return seconds + "s left";
+            } else if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return minutes + "min " + remainingSeconds + "s";
+            } else if (seconds < 86400) {
+                const hours = Math.floor(seconds / 3600);
+                const remainingMinutes = Math.floor((seconds % 3600) / 60);
+                return hours + "h " + remainingMinutes + "min";
+            } else {
+                const days = Math.floor(seconds / 86400);
+                const remainingHours = Math.floor((seconds % 86400) / 3600);
+                return days + "d " + remainingHours + "h";
+            }
+        }
         function timestampToDateTimeString(timestamp) {
             const date = new Date(timestamp * 1000);
             return date.toLocaleString();
@@ -55,8 +72,13 @@
                 $("#frequency").html(`${json.frequency/1000000} MHz`);
                 $("#objectname").html(`${json.object_tracker.object_name}`);
                 const ot = json.object_tracker;
-                $("#next_aos").html(`${timestampToDateTimeString(ot.next_aos_time)}`);
-                $("#next_los").html(`${timestampToDateTimeString(ot.next_los_time)}`);
+                if(ot.next_event_is_aos==true){
+                    $("#next_aos").html(`${timestampToDateTimeString(ot.next_aos_time)} (in ${formatTime(ot.next_event_in.toFixed(0))})`);
+                    $("#next_los").html(`${timestampToDateTimeString(ot.next_los_time)}`);
+                }else{
+                    $("#next_aos").html(`${timestampToDateTimeString(ot.next_aos_time)}`);
+                    $("#next_los").html(`${timestampToDateTimeString(ot.next_los_time)} (in ${formatTime(ot.next_event_in.toFixed(0))} sec)`);
+                }
                 $("#pos_azimuth").html(`${calculateSatelliteAzimuth(json)}°`);
                 $("#pos_elevation").html(`${calculateSatelliteElevation(json)}°`);
                 $("#pos_range").html(`${ot.sat_current_range.toFixed(2)} km`);
