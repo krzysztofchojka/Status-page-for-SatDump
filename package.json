@@ -1,0 +1,14 @@
+{
+    "name": "Status-page-for-SatDump",
+    "version": "1.0.0",
+    "description": "This is an alternative to SatDump's default status page. It eliminates the flickering effect and adds a few other features for more convenient use.",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "author": "Krzysztof Chojka",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.17.2"
+    }
+  }

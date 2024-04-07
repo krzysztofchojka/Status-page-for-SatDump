@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatDump Status Page</title>
+    <script   src="jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <main>
+        <h3 style="margin-top:0;width:fit-content;">Frequency</h3>
+        <div id="frequency" class="data_div">Loading...</div>
+
+        <h3>Object tracker</h3>
+        <div id="obtrackparent">
+            <img id="radar">
+            <div id="objectdata" class="data_div">
+                <h4 id="objectname"></h4>
+                <pre id="pre"></pre>
+            </div>
+        </div>
+        <h3>Schedule</h3>
+            <img id="schedule" class="maxwidth">
+        <h3>FFT</h3>
+            <img id="fft" class="maxwidth">
+    <script>
+        function getJson(){
+            $.get("/proxy/api")
+            .done((json)=>{
+                $("#pre").html(JSON.stringify(json.object_tracker));
+                $("#frequency").html(`${json.frequency/1000000} MHz`);
+                $("#objectname").html(`${json.object_tracker.object_name}`);
+            })
+            $("#radar").attr("src", "/proxy/polarplot.jpeg?r=" + Date.now());
+            $("#fft").attr("src", "/proxy/fft.jpeg?r=" + Date.now());
+            $("#schedule").attr("src", "/proxy/schedule.jpeg?r=" + Date.now());
+        }
+        setInterval(getJson, 1000);
+    </script>
+    </main>
+</body>
+</html>

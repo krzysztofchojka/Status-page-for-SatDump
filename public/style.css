@@ -1,0 +1,55 @@
+*{
+    min-width:0;
+    font-family: sans-serif;
+    color:white;
+}
+body{
+    margin:0;
+    padding:0;
+    background-image:url("dnb_land_ocean_ice.2012.2160x1080.jpg");
+    background-size:cover;
+    background-color:rgb(5,10,50);
+}
+#pre{
+    text-wrap: break-word;
+    width:100%;
+    overflow:auto;
+}
+main{
+    width:calc(100% - 20px);
+    padding:10px;
+    height:calc(100dvh - 20px);
+    max-width:800px;
+    background:rgba(10,10,10,0.95);
+    overflow-x:hidden;
+    overflow-y:auto;
+    margin:0 auto;
+    color:white;
+
+}
+h3{
+    background:#333333;
+    border-radius:8px;
+    padding:8px;
+    font-weight:600;
+    width:calc(100% - 20px);
+    margin: 15px 0 10px 0;
+}
+h4{
+    margin-left:0;
+}
+#obtrackparent{
+    display:inline-flex;
+    justify-content:flex-start;
+}
+.data_div{
+    margin-left:10px;
+}
+.maxwidth{
+    width:100%;
+}
+@media only screen and (max-width: 600px) {
+#obtrackparent{
+display:block;
+}
+}
