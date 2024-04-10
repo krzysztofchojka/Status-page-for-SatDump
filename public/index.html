@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SatDump Status Page</title>
     <script   src="jquery-3.7.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css?v0.04">
 </head>
 <body>
     <main>
+        <div class="lim">
         <h3 style="margin-top:0;width:fit-content;">Frequency</h3>
         <div id="frequency" class="data_div">Loading...</div>
 
@@ -30,6 +31,8 @@
             <img id="schedule" class="maxwidth">
         <h3>FFT</h3>
             <img id="fft" class="maxwidth">
+        </div>
+    </main>
     <script type="application/javascript">
         function formatTime(seconds) {
             if (seconds < 60) {
@@ -92,6 +95,5 @@
         }
         setInterval(getJson, 1000);
     </script>
-    </main>
 </body>
 </html>
